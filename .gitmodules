@@ -5,5 +5,5 @@
 	path = src/dt_module/library/moveit_lib
 	url = git@github.com:KeV1NBR/moveit_lib.git
 [submodule "src/dt_module/library/tm_lib"]
-    path = src/dw_module/library/tm_lib
-    url = git@github.com:KeV1NBR/tm_lib.git
+	path = src/dt_module/library/tm_lib
+	url = git@github.com:KeV1NBR/tm_lib.git

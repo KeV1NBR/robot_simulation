@@ -21,6 +21,5 @@ class DTNode {
 
     trajectory_msgs::JointTrajectory getCurrentInfo();
 
-    Arm arm;
     Tm tm;
 };
