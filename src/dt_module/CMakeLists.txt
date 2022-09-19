@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(dw_module)
+project(dt_module)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++14)
@@ -162,7 +162,7 @@ include_directories(src/sync/)
 
 add_executable(sync src/sync/sync.cpp src/sync/main.cpp)
 
-target_link_libraries(sync moveit_lib tm_lib )
+target_link_libraries(sync moveit_lib tm_lib ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_dependencies(sync ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
