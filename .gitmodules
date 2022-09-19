@@ -1,0 +1,9 @@
+[submodule "src/tmr_ros1"]
+	path = src/tmr_ros1
+	url = https://github.com/TechmanRobotInc/tmr_ros1.git
+[submodule "src/dw_module/library/moveit_lib"]
+	path = src/dw_module/library/moveit_lib
+	url = git@github.com:KeV1NBR/moveit_lib.git
+[submodule "src/dw_module/library/tm_lib"]
+	path = src/dw_module/library/tm_lib
+	url = git@github.com:KeV1NBR/tm_lib.git
