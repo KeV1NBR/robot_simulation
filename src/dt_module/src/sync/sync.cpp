@@ -33,7 +33,7 @@ trajectory_msgs::JointTrajectory DTNode::getCurrentInfo() {
     result.points.resize(1);
 
     result.points[0].positions = tm.getJointPosition();
-    result.points[0].time_from_start = {1, 0};
+    result.points[0].time_from_start = ros::Duration(0.1);
 
     return result;
 }

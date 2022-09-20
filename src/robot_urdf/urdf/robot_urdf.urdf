@@ -99,11 +99,8 @@
     <limit
       lower="-4.7124"
       upper="4.7124"
-      effort="150"
-      velocity="3.15" />
-    <dynamics
-      damping="100"
-      friction="0.1" />
+      effort="2000"
+      velocity="100" />
     <safety_controller
       soft_upper="4.5623"
       soft_lower="-4.5623"
@@ -165,8 +162,8 @@
     <limit
       lower="-3.1416"
       upper="3.1416"
-      effort="150"
-      velocity="3.15" />
+      effort="2000"
+      velocity="100" />
     <dynamics
       damping="0"
       friction="0.1" />
@@ -231,8 +228,8 @@
     <limit
       lower="-3.1416"
       upper="3.1416"
-      effort="150"
-      velocity="3.15" />
+      effort="2000"
+      velocity="100" />
     <dynamics
       damping="0"
       friction="0.1" />
@@ -297,8 +294,8 @@
     <limit
       lower="-3.1416"
       upper="3.1416"
-      effort="150"
-      velocity="3.15" />
+      effort="2000"
+      velocity="100" />
     <dynamics
       damping="0"
       friction="0.1" />
@@ -363,8 +360,8 @@
     <limit
       lower="-3.1416"
       upper="3.1416"
-      effort="150"
-      velocity="3.15" />
+      effort="2000"
+      velocity="100" />
     <dynamics
       damping="0"
       friction="0.1" />
@@ -429,8 +426,8 @@
     <limit
       lower="-4.7124"
       upper="4.7124"
-      effort="150"
-      velocity="0" />
+      effort="2000"
+      velocity="100" />
     <dynamics
       damping="0"
       friction="0.1" />
