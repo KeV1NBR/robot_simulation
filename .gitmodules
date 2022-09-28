@@ -7,3 +7,6 @@
 [submodule "src/dt_module/library/tm_lib"]
 	path = src/dt_module/library/tm_lib
 	url = git@github.com:KeV1NBR/tm_lib.git
+[submodule "src/skeleton_module/library/kinect_lib"]
+	path = src/skeleton_module/library/kinect_lib
+	url = git@github.com:KeV1NBR/kinect_lib.git
