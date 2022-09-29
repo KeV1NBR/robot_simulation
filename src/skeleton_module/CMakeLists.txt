@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   genmsg
   actionlib_msgs
   actionlib
+  tf
 )
 
 include_directories(${catkin_INCLUDE_DIRS})
@@ -164,7 +165,7 @@ include_directories(src/)
 
 add_executable(skeleton_sim src/skeleton_sim.cpp src/main.cpp)
 
-target_link_libraries(skeleton_sim kinect     k4a::k4a k4a::k4arecord k4abt ${OpenCV_LIBS} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(skeleton_sim kinect k4a::k4a k4a::k4arecord k4abt ${OpenCV_LIBS} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_dependencies(skeleton_sim ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
