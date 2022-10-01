@@ -41,7 +41,7 @@ void SkeletonSimNode::run() {
         kinect.update();
         color = kinect.getRgbImage();
         depth = kinect.getDepthImage();
-        spawnHuman();
+	spawnHuman();
 
         imshow("color", color);
         imshow("depth", depth);
@@ -69,17 +69,17 @@ void SkeletonSimNode::spawnHuman() {
                 std::this_thread::sleep_for(chrono::milliseconds(100));
                 tf::StampedTransform transform;
 
-                listener.lookupTransform(
-                    "/human" + to_string(bodyNum + 1) + "_body", "/world",
+                listener.lookupTransform("/world", 
+                    "/human" + to_string(bodyNum + 1) + "_body",
                     ros::Time(0), transform);
                 if (!isBody) {
                     system(("rosrun gazebo_ros spawn_model -sdf -file "
-                            "/home/kevin/model_editor_models/human/model.sdf "
+                            "/home/kevin/project/robot_simulation/src/skeleton_module/resouce/"
+        "human/model.sdf "
                             "-model "
                             "human1 -x " +
                             to_string(transform.getOrigin().x()) + " -y " +
-                            to_string(transform.getOrigin().y()) + " -z " +
-                            to_string(transform.getOrigin().z()))
+                            to_string(transform.getOrigin().y()))
                                .c_str());
                     isBody = true;
                 }
@@ -89,7 +89,8 @@ void SkeletonSimNode::spawnHuman() {
     }
 }
 void SkeletonSimNode::moveSkeleton(std::vector<Point3f> body) {
-    std::vector<float> headPos(6);
+    std::vector<float> headPos(6, .0);
+    std::vector<float> bodyPos(6, .0);
     tf::StampedTransform transform;
     gazebo_msgs::LinkState msg;
 
@@ -100,11 +101,12 @@ void SkeletonSimNode::moveSkeleton(std::vector<Point3f> body) {
     setTF(headPos, "/human1_head");
 
     std::this_thread::sleep_for(chrono::milliseconds(100));
-    listener.lookupTransform("/human1_head", "/world", ros::Time(0), transform);
+    listener.lookupTransform("/world", "/human1_head", ros::Time(0), transform);
     msg.link_name = "human1::head";
     msg.pose.position.x = transform.getOrigin().x();
     msg.pose.position.y = transform.getOrigin().y();
     msg.pose.position.z = transform.getOrigin().z();
+    cout<<msg.pose.position.x<<", "<<msg.pose.position.y<<", "<<msg.pose.position.z<<endl;
     skeletonPublisher.publish(msg);
 }
 
@@ -113,7 +115,7 @@ void SkeletonSimNode::setTF(std::vector<float> pos, std::string name) {
     tf::Quaternion q;
 
     transform.setOrigin(tf::Vector3(pos[0], pos[1], pos[2]));
-    // q.setRPY(pos[3], pos[4], pos[5]);
+    q.setRPY(pos[3], pos[4], pos[5]);
     transform.setRotation(q);
     broadcaster.sendTransform(
         tf::StampedTransform(transform, ros::Time::now(), "/kinect", name));
