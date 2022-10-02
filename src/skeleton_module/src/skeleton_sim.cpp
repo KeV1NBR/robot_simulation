@@ -104,46 +104,37 @@ void SkeletonSimNode::moveSkeleton(std::vector<Point3f> body) {
     std::vector<float> armRightPos(6, .0);
     std::vector<float> handRightPos(6, .0);
 
-    headPos[0] = (body[EYE_LEFT - 1].x + body[EYE_RIGHT - 1].x) / 2000;
-    headPos[1] = (body[EYE_LEFT - 1].y + body[EYE_RIGHT - 1].y) / 2000;
-    headPos[2] = (body[EYE_LEFT - 1].z + body[EYE_RIGHT - 1].z) / 2000;
+    headPos[0] = (body[EYE_LEFT].x + body[EYE_RIGHT].x) / 2000;
+    headPos[1] = (body[EYE_LEFT].y + body[EYE_RIGHT].y) / 2000;
+    headPos[2] = (body[EYE_LEFT].z + body[EYE_RIGHT].z) / 2000;
 
-    bodyPos[0] = (body[NECK - 1].x + body[SPINE_NAVEL - 1].x) / 2000;
-    bodyPos[1] = (body[NECK - 1].y + body[SPINE_NAVEL - 1].y) / 2000;
-    bodyPos[2] = (body[NECK - 1].z + body[SPINE_NAVEL - 1].z) / 2000;
+    bodyPos[0] = (body[NECK].x + body[SPINE_NAVEL].x) / 2000;
+    bodyPos[1] = (body[NECK].y + body[SPINE_NAVEL].y) / 2000;
+    bodyPos[2] = (body[NECK].z + body[SPINE_NAVEL].z) / 2000;
 
-    shoulderLeftPos[0] =
-        (body[SHOULDER_LEFT - 1].x + body[ELBOW_LEFT - 1].x) / 2000;
-    shoulderLeftPos[1] =
-        (body[SHOULDER_LEFT - 1].y + body[ELBOW_LEFT - 1].y) / 2000;
-    shoulderLeftPos[2] =
-        (body[SHOULDER_LEFT - 1].z + body[ELBOW_LEFT - 1].z) / 2000;
+    shoulderLeftPos[0] = (body[SHOULDER_LEFT].x + body[ELBOW_LEFT].x) / 2000;
+    shoulderLeftPos[1] = (body[SHOULDER_LEFT].y + body[ELBOW_LEFT].y) / 2000;
+    shoulderLeftPos[2] = (body[SHOULDER_LEFT].z + body[ELBOW_LEFT].z) / 2000;
 
-    shoulderRightPos[0] =
-        (body[SHOULDER_RIGHT - 1].x + body[ELBOW_RIGHT - 1].x) / 2000;
-    shoulderRightPos[1] =
-        (body[SHOULDER_RIGHT - 1].y + body[ELBOW_RIGHT - 1].y) / 2000;
-    shoulderRightPos[2] =
-        (body[SHOULDER_RIGHT - 1].z + body[ELBOW_RIGHT - 1].z) / 2000;
+    shoulderRightPos[0] = (body[SHOULDER_RIGHT].x + body[ELBOW_RIGHT].x) / 2000;
+    shoulderRightPos[1] = (body[SHOULDER_RIGHT].y + body[ELBOW_RIGHT].y) / 2000;
+    shoulderRightPos[2] = (body[SHOULDER_RIGHT].z + body[ELBOW_RIGHT].z) / 2000;
 
-    armLeftPos[0] = (body[ELBOW_LEFT - 1].x + body[WRIST_LEFT - 1].x) / 2000;
-    armLeftPos[1] = (body[ELBOW_LEFT - 1].y + body[WRIST_LEFT - 1].y) / 2000;
-    armLeftPos[2] = (body[ELBOW_LEFT - 1].z + body[WRIST_LEFT - 1].z) / 2000;
+    armLeftPos[0] = (body[ELBOW_LEFT].x + body[WRIST_LEFT].x) / 2000;
+    armLeftPos[1] = (body[ELBOW_LEFT].y + body[WRIST_LEFT].y) / 2000;
+    armLeftPos[2] = (body[ELBOW_LEFT].z + body[WRIST_LEFT].z) / 2000;
 
-    armRightPos[0] = (body[ELBOW_RIGHT - 1].x + body[WRIST_RIGHT - 1].x) / 2000;
-    armRightPos[1] = (body[ELBOW_RIGHT - 1].y + body[WRIST_RIGHT - 1].y) / 2000;
-    armRightPos[2] = (body[ELBOW_RIGHT - 1].z + body[WRIST_RIGHT - 1].z) / 2000;
+    armRightPos[0] = (body[ELBOW_RIGHT].x + body[WRIST_RIGHT].x) / 2000;
+    armRightPos[1] = (body[ELBOW_RIGHT].y + body[WRIST_RIGHT].y) / 2000;
+    armRightPos[2] = (body[ELBOW_RIGHT].z + body[WRIST_RIGHT].z) / 2000;
 
-    handLeftPos[0] = (body[WRIST_LEFT - 1].x + body[HANDTIP_LEFT - 1].x) / 2000;
-    handLeftPos[1] = (body[WRIST_LEFT - 1].y + body[HANDTIP_LEFT - 1].y) / 2000;
-    handLeftPos[2] = (body[WRIST_LEFT - 1].z + body[HANDTIP_LEFT - 1].z) / 2000;
+    handLeftPos[0] = (body[WRIST_LEFT].x + body[HANDTIP_LEFT].x) / 2000;
+    handLeftPos[1] = (body[WRIST_LEFT].y + body[HANDTIP_LEFT].y) / 2000;
+    handLeftPos[2] = (body[WRIST_LEFT].z + body[HANDTIP_LEFT].z) / 2000;
 
-    handRightPos[0] =
-        (body[WRIST_RIGHT - 1].x + body[HANDTIP_RIGHT - 1].x) / 2000;
-    handRightPos[1] =
-        (body[WRIST_RIGHT - 1].y + body[HANDTIP_RIGHT - 1].y) / 2000;
-    handRightPos[2] =
-        (body[WRIST_RIGHT - 1].z + body[HANDTIP_RIGHT - 1].z) / 2000;
+    handRightPos[0] = (body[WRIST_RIGHT].x + body[HANDTIP_RIGHT].x) / 2000;
+    handRightPos[1] = (body[WRIST_RIGHT].y + body[HANDTIP_RIGHT].y) / 2000;
+    handRightPos[2] = (body[WRIST_RIGHT].z + body[HANDTIP_RIGHT].z) / 2000;
 
     bodyPos[3] = M_PI_2;
     shoulderLeftPos[4] = M_PI_2;
