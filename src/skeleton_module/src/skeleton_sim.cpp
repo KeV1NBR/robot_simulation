@@ -60,20 +60,21 @@ void SkeletonSimNode::spawnHuman() {
                 std::vector<Point3f> skeleton =
                     kinect.getConcernPart(bodies[i]);
 
-                std::vector<float> posKinectFrame = {
-                    (skeleton[0].x + skeleton[1].x) / 2000,
-                    (skeleton[0].y + skeleton[1].y) / 2000,
-                    (skeleton[0].z + skeleton[1].z) / 2000};
-                setTF(posKinectFrame,
-                      "/human" + to_string(bodyNum + 1) + "_body");
-
-                std::this_thread::sleep_for(chrono::milliseconds(100));
-                tf::StampedTransform transform;
-
-                listener.lookupTransform(
-                    "/world", "/human" + to_string(bodyNum + 1) + "_body",
-                    ros::Time(0), transform);
                 if (!isBody) {
+                    std::vector<float> posKinectFrame = {
+                        (skeleton[0].x + skeleton[1].x) / 2000,
+                        (skeleton[0].y + skeleton[1].y) / 2000,
+                        (skeleton[0].z + skeleton[1].z) / 2000};
+                    setTF(posKinectFrame,
+                          "/human" + to_string(bodyNum + 1) + "_body");
+
+                    std::this_thread::sleep_for(chrono::milliseconds(100));
+                    tf::StampedTransform transform;
+
+                    listener.lookupTransform(
+                        "/world", "/human" + to_string(bodyNum + 1) + "_body",
+                        ros::Time(0), transform);
+
                     system(("rosrun gazebo_ros spawn_model -sdf -file "
                             "/home/kevin/project/robot_simulation/src/"
                             "skeleton_module/resouce/"
@@ -90,6 +91,7 @@ void SkeletonSimNode::spawnHuman() {
         }
     }
 }
+double rad2Degree(double rad) { return rad * 180 / M_PI; };
 void SkeletonSimNode::moveSkeleton(std::vector<Point3f> body) {
     std::vector<float> headPos(6, .0);
     std::vector<float> bodyPos(6, .0);
@@ -102,42 +104,72 @@ void SkeletonSimNode::moveSkeleton(std::vector<Point3f> body) {
     std::vector<float> armRightPos(6, .0);
     std::vector<float> handRightPos(6, .0);
 
-    // tf::StampedTransform transform;
-    //  gazebo_msgs::LinkState msg;
+    headPos[0] = (body[EYE_LEFT - 1].x + body[EYE_RIGHT - 1].x) / 2000;
+    headPos[1] = (body[EYE_LEFT - 1].y + body[EYE_RIGHT - 1].y) / 2000;
+    headPos[2] = (body[EYE_LEFT - 1].z + body[EYE_RIGHT - 1].z) / 2000;
 
-    headPos[0] = (body[EYE_LEFT].x + body[EYE_RIGHT].x) / 2000;
-    headPos[1] = (body[EYE_LEFT].y + body[EYE_RIGHT].y) / 2000;
-    headPos[2] = (body[EYE_LEFT].z + body[EYE_RIGHT].z) / 2000;
+    bodyPos[0] = (body[NECK - 1].x + body[SPINE_NAVEL - 1].x) / 2000;
+    bodyPos[1] = (body[NECK - 1].y + body[SPINE_NAVEL - 1].y) / 2000;
+    bodyPos[2] = (body[NECK - 1].z + body[SPINE_NAVEL - 1].z) / 2000;
 
-    bodyPos[0] = (body[NECK].x + body[SPINE_NAVEL].x) / 2000;
-    bodyPos[1] = (body[NECK].y + body[SPINE_NAVEL].y) / 2000;
-    bodyPos[2] = (body[NECK].z + body[SPINE_NAVEL].z) / 2000;
-    bodyPos[3] = atan2((body[NECK].z - body[SPINE_NAVEL].z),
-                       (body[NECK].y + body[SPINE_NAVEL].y));
-    bodyPos[4] = atan2((body[NECK].x - body[SPINE_NAVEL].x),
-                       (body[NECK].z + body[SPINE_NAVEL].z));
-    bodyPos[5] = atan2((body[NECK].y - body[SPINE_NAVEL].y),
-                       (body[NECK].x + body[SPINE_NAVEL].x));
+    shoulderLeftPos[0] =
+        (body[SHOULDER_LEFT - 1].x + body[ELBOW_LEFT - 1].x) / 2000;
+    shoulderLeftPos[1] =
+        (body[SHOULDER_LEFT - 1].y + body[ELBOW_LEFT - 1].y) / 2000;
+    shoulderLeftPos[2] =
+        (body[SHOULDER_LEFT - 1].z + body[ELBOW_LEFT - 1].z) / 2000;
+
+    shoulderRightPos[0] =
+        (body[SHOULDER_RIGHT - 1].x + body[ELBOW_RIGHT - 1].x) / 2000;
+    shoulderRightPos[1] =
+        (body[SHOULDER_RIGHT - 1].y + body[ELBOW_RIGHT - 1].y) / 2000;
+    shoulderRightPos[2] =
+        (body[SHOULDER_RIGHT - 1].z + body[ELBOW_RIGHT - 1].z) / 2000;
+
+    armLeftPos[0] = (body[ELBOW_LEFT - 1].x + body[WRIST_LEFT - 1].x) / 2000;
+    armLeftPos[1] = (body[ELBOW_LEFT - 1].y + body[WRIST_LEFT - 1].y) / 2000;
+    armLeftPos[2] = (body[ELBOW_LEFT - 1].z + body[WRIST_LEFT - 1].z) / 2000;
+
+    armRightPos[0] = (body[ELBOW_RIGHT - 1].x + body[WRIST_RIGHT - 1].x) / 2000;
+    armRightPos[1] = (body[ELBOW_RIGHT - 1].y + body[WRIST_RIGHT - 1].y) / 2000;
+    armRightPos[2] = (body[ELBOW_RIGHT - 1].z + body[WRIST_RIGHT - 1].z) / 2000;
+
+    handLeftPos[0] = (body[WRIST_LEFT - 1].x + body[HANDTIP_LEFT - 1].x) / 2000;
+    handLeftPos[1] = (body[WRIST_LEFT - 1].y + body[HANDTIP_LEFT - 1].y) / 2000;
+    handLeftPos[2] = (body[WRIST_LEFT - 1].z + body[HANDTIP_LEFT - 1].z) / 2000;
+
+    handRightPos[0] =
+        (body[WRIST_RIGHT - 1].x + body[HANDTIP_RIGHT - 1].x) / 2000;
+    handRightPos[1] =
+        (body[WRIST_RIGHT - 1].y + body[HANDTIP_RIGHT - 1].y) / 2000;
+    handRightPos[2] =
+        (body[WRIST_RIGHT - 1].z + body[HANDTIP_RIGHT - 1].z) / 2000;
+
+    bodyPos[3] = M_PI_2;
+    shoulderLeftPos[4] = M_PI_2;
+    shoulderRightPos[4] = M_PI_2;
+    armLeftPos[4] = M_PI_2;
+    armRightPos[4] = M_PI_2;
 
     setTF(headPos, "/human1_head");
     setTF(bodyPos, "/human1_body");
+    setTF(shoulderLeftPos, "/human1_shoulder_left");
+    setTF(shoulderRightPos, "/human1_shoulder_right");
+    setTF(armLeftPos, "/human1_arm_left");
+    setTF(armRightPos, "/human1_arm_right");
+    setTF(handLeftPos, "/human1_hand_left");
+    setTF(handRightPos, "/human1_hand_right");
 
     std::this_thread::sleep_for(chrono::milliseconds(100));
 
     moveGazebo("/human1_head", "human1::head");
     moveGazebo("/human1_body", "human1::body");
-    // moveGazebo("/human1_shoulder_left", "human1::shoulder_left");
-    // moveGazebo("/human1_arm_left", "human1::arm_left");
-    // moveGazebo("/human1_hand_left", "human1:hand_left");
-    // moveGazebo("/human1_shoulder_right", "human1::shoulder_right");
-    // moveGazebo("/human1_arm_right", "human1::arm_right");
-    // moveGazebo("/human1_hand_right", "human1:hand_right");
-
-    // listener.lookupTransform("/world", "/human1_head", ros::Time(0),
-    // transform); msg.link_name = "human1::head"; msg.pose.position.x =
-    // transform.getOrigin().x(); msg.pose.position.y =
-    // transform.getOrigin().y(); msg.pose.position.z =
-    // transform.getOrigin().z(); skeletonPublisher.publish(msg);
+    moveGazebo("/human1_shoulder_left", "human1::shoulder_left");
+    moveGazebo("/human1_arm_left", "human1::arm_left");
+    moveGazebo("/human1_hand_left", "human1::hand_left");
+    moveGazebo("/human1_shoulder_right", "human1::shoulder_right");
+    moveGazebo("/human1_arm_right", "human1::arm_right");
+    moveGazebo("/human1_hand_right", "human1::hand_right");
 }
 
 void SkeletonSimNode::setTF(std::vector<float> pos, std::string name) {
@@ -150,14 +182,36 @@ void SkeletonSimNode::setTF(std::vector<float> pos, std::string name) {
     broadcaster.sendTransform(
         tf::StampedTransform(transform, ros::Time::now(), "/kinect", name));
 }
+vector<double> quat2Euler(double rx, double ry, double rz, double rw) {
+    tf::Quaternion quaternion(rx, ry, rz, rw);
+    tf::Matrix3x3 rpy(quaternion);
+    vector<double> result(3, .0);
+    rpy.getRPY(result[0], result[1], result[2]);
+
+    return result;
+}
 void SkeletonSimNode::moveGazebo(std::string tfName, std::string linkName) {
     tf::StampedTransform transform;
     gazebo_msgs::LinkState msg;
+    tf::Quaternion q;
 
     listener.lookupTransform("/world", tfName, ros::Time(0), transform);
     msg.link_name = linkName;
     msg.pose.position.x = transform.getOrigin().x();
     msg.pose.position.y = transform.getOrigin().y();
     msg.pose.position.z = transform.getOrigin().z();
+    q = transform.getRotation();
+    msg.pose.orientation.w = q.w();
+    msg.pose.orientation.x = q.x();
+    msg.pose.orientation.y = q.y();
+    msg.pose.orientation.z = q.z();
     skeletonPublisher.publish(msg);
+
+    if (linkName == "human1::body") {
+        vector<double> tmp = quat2Euler(q.x(), q.y(), q.z(), q.w());
+        for (int i = 0; i < tmp.size(); i++) {
+            // cout << tmp[i] << ", ";
+        }
+        //      cout << endl;
+    }
 }
