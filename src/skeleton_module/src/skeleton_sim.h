@@ -25,7 +25,7 @@ class SkeletonSimNode {
     void spawnHuman();
     void moveSkeleton(std::vector<cv::Point3f> body);
     void setTF(std::vector<float> pos, std::string name);
-
+    void moveGazebo(std::string tfName, std::string linkName);
     int bodyNum;
     bool isBody;
 
