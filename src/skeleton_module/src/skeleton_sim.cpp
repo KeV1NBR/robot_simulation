@@ -105,12 +105,19 @@ void SkeletonSimNode::moveSkeleton(std::vector<Point3f> body) {
     std::vector<float> handRightPos(6, .0);
 
     headPos[0] = (body[EYE_LEFT].x + body[EYE_RIGHT].x) / 2000;
-    headPos[1] = (body[EYE_LEFT].y + body[EYE_RIGHT].y) / 2000;
-    headPos[2] = (body[EYE_LEFT].z + body[EYE_RIGHT].z) / 2000;
+    headPos[1] = (body[EYE_LEFT].y + body[EYE_RIGHT].y) / 2000 + .1;
+    headPos[2] = (body[EYE_LEFT].z + body[EYE_RIGHT].z) / 2000 + 0.15;
 
     bodyPos[0] = (body[NECK].x + body[SPINE_NAVEL].x) / 2000;
-    bodyPos[1] = (body[NECK].y + body[SPINE_NAVEL].y) / 2000;
+    bodyPos[1] = (body[NECK].y + body[SPINE_NAVEL].y) / 2000 + .2;
     bodyPos[2] = (body[NECK].z + body[SPINE_NAVEL].z) / 2000;
+    // bodyPos[3] = atan2((body[NECK].z - body[SPINE_NAVEL].z),
+    //                   (body[NECK].y + body[SPINE_NAVEL].y)) +
+    //             M_PI_2;
+    // bodyPos[4] = atan2((body[NECK].x - body[SPINE_NAVEL].x),
+    //                   (body[NECK].z + body[SPINE_NAVEL].z));
+    // bodyPos[5] = atan2((body[NECK].y - body[SPINE_NAVEL].y),
+    //                   (body[NECK].x + body[SPINE_NAVEL].x));
 
     shoulderLeftPos[0] = (body[SHOULDER_LEFT].x + body[ELBOW_LEFT].x) / 2000;
     shoulderLeftPos[1] = (body[SHOULDER_LEFT].y + body[ELBOW_LEFT].y) / 2000;
