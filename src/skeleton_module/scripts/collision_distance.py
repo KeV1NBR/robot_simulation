@@ -1,6 +1,20 @@
-#import rospy
+import rospy
 import fcl
+import tf
+
 import numpy as np
+
+
+class CollisionPair:
+    def __init__(self):
+        self.humanName = ""
+        self.humanPartName = ""
+        self.robotPartName = ""
+        self.info = fcl.DistanceResult()
+
+    def getInfo(self):
+        return self.info
+
 
 # human setting
 body = fcl.Cylinder(0.2, 0.6)
@@ -14,14 +28,18 @@ Link2 = fcl.Cylinder(0.05, 0.4)
 Link3 = fcl.Cylinder(0.05, 0.11)
 Link4 = fcl.Cylinder(0.085, 0.43)
 
+
 T = np.array([1.0, 0, 0])
-tf = fcl.Transform(T)
+transform = fcl.Transform(T)
 human1_head = fcl.CollisionObject(head)
-human1_body = fcl.CollisionObject(body, tf)
+human1_body = fcl.CollisionObject(body, transform)
 
 request = fcl.DistanceRequest()
 result = fcl.DistanceResult()
 
 ret = fcl.distance(human1_head, human1_body, request, result)
-print(ret)
+print(result.min_distance)
 print(result.nearest_points)
+
+rospy.init_node('collision_distance')
+listener = tf.TransformListener()
