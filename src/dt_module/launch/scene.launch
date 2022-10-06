@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <param name="cabinet" textfile="$(find dt_module)/resource/cabinet/model.sdf" />
+  <node name="spawn_cabinet0" pkg="gazebo_ros" type="spawn_model" args="-param cabinet -sdf -model cabinet0  -y 2.75 -Y -1.570796326794897" />
+
+  <node name="spawn_cabinet1" pkg="gazebo_ros" type="spawn_model" args="-param cabinet -sdf -model cabinet1 -x -1.76 -y 2.75 -Y -1.570796326794897" />
+  <node name="spawn_cabinet2" pkg="gazebo_ros" type="spawn_model" args="-param cabinet -sdf -model cabinet2 -x -0.88 -y 2.75 -Y -1.570796326794897" />
+  <node name="spawn_cabinet3" pkg="gazebo_ros" type="spawn_model" args="-param cabinet -sdf -model cabinet3 -x 0.88  -y 2.75 -Y -1.570796326794897" />
+  <node name="spawn_cabinet4" pkg="gazebo_ros" type="spawn_model" args="-param cabinet -sdf -model cabinet4 -x 1.76 -y 2.75 -Y -1.570796326794897" />
+  <node name="spawn_cabinet5" pkg="gazebo_ros" type="spawn_model" args="-param cabinet -sdf -model cabinet5 -x 2.64 -y 2.75 -Y -1.570796326794897" />
+
+
+
+
+
+
+</launch>

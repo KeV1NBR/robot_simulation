@@ -41,5 +41,9 @@ ret = fcl.distance(human1_head, human1_body, request, result)
 print(result.min_distance)
 print(result.nearest_points)
 
-rospy.init_node('collision_distance')
-listener = tf.TransformListener()
+if __name__ == '__main__':
+    rospy.init_node('collision_distance')
+    listener = tf.TransformListener()
+    rate = rospy.Rate(10.0)
+    while not rospy.is_shutdown():
+        (trans,rot) = listener.lookupTransform('/turtle2', '/turtle1', rospy.Time(0))

@@ -15,7 +15,7 @@ using namespace std;
 
 SkeletonSimNode::SkeletonSimNode() {
     std::ifstream humanModelFile(
-        "/home/kevin/project/robot_simulation/src/skeleton_module/resouce/"
+        "/home/kevin/project/robot_simulation/src/skeleton_module/resource/"
         "human/model.sdf");
     humanModel.assign((std::istreambuf_iterator<char>(humanModelFile)),
                       (std::istreambuf_iterator<char>()));
