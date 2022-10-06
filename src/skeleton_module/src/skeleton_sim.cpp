@@ -77,7 +77,7 @@ void SkeletonSimNode::spawnHuman() {
 
                     system(("rosrun gazebo_ros spawn_model -sdf -file "
                             "/home/kevin/project/robot_simulation/src/"
-                            "skeleton_module/resouce/"
+                            "skeleton_module/resource/"
                             "human/model.sdf "
                             "-model "
                             "human1 -x " +
