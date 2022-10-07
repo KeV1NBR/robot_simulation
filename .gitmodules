@@ -10,3 +10,6 @@
 [submodule "src/skeleton_module/library/kinect_lib"]
 	path = src/skeleton_module/library/kinect_lib
 	url = git@github.com:KeV1NBR/kinect_lib.git
+[submodule "kinematics_poe"]
+	path = kinematics_poe
+	url = git@github.com:KeV1NBR/kinematics_poe.git
