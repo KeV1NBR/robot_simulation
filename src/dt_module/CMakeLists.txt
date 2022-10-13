@@ -167,6 +167,25 @@ target_link_libraries(sync moveit_lib tm_lib ${catkin_LIBRARIES} ${Boost_LIBRARI
 add_dependencies(sync ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 
+include_directories(src/tf_publisher/)
+
+add_executable(tf_publisher src/tf_publisher/tf_publisher.cpp src/tf_publisher/main.cpp)
+
+target_link_libraries(tf_publisher ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_dependencies(tf_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+
+include_directories(src/robot_collid/)
+
+add_executable(robot_collid src/robot_collid/robot_collid.cpp src/robot_collid/main.cpp)
+
+target_link_libraries(robot_collid ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_dependencies(robot_collid ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use

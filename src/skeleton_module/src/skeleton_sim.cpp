@@ -92,6 +92,7 @@ void SkeletonSimNode::spawnHuman() {
     }
 }
 double rad2Degree(double rad) { return rad * 180 / M_PI; };
+
 void SkeletonSimNode::moveSkeleton(std::vector<Point3f> body) {
     std::vector<float> headPos(6, .0);
     std::vector<float> bodyPos(6, .0);
