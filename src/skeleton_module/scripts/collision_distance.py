@@ -2,7 +2,6 @@ import rospy
 import fcl
 import tf
 
-import numpy as np
 
 # human setting
 body = fcl.Cylinder(0.2, 0.6) #0
@@ -34,12 +33,15 @@ class CollisionPair:
         self.info = fcl.DistanceResult()
 
     def update(self):
-        T = np.array([1.0, 0, 0])
-        transform = fcl.Transform(T)
-        request = fcl.DistanceRequest()
-        humanObject = fcl.CollisionObject(self.humanPartInfo.part, transform)
-        robotObject = fcl.CollisionObject(self.robotPartInfo.part)
-        fcl.distance(humanObject, robotObject, request, self.info)
+        if(listener.canTransform('/world', 'human'+str(self.humanNum+1)+'_'+self.humanPartInfo.partName, rospy.Time(0))&listener.canTransform('/world', self.robotPartInfo.partName, rospy.Time(0))):
+            (humanTrans,humanRot) = listener.lookupTransform('/world', 'human'+str(self.humanNum+1)+'_'+self.humanPartInfo.partName, rospy.Time(0))
+            (robotTrans,robotRot) = listener.lookupTransform('/world', self.robotPartInfo.partName, rospy.Time(0))
+            humanTf = fcl.Transform(humanRot, humanTrans)
+            robotTf = fcl.Transform(robotRot, robotTrans)
+            request = fcl.DistanceRequest()
+            humanObject = fcl.CollisionObject(self.humanPartInfo.part, humanTf)
+            robotObject = fcl.CollisionObject(self.robotPartInfo.part, robotTf)
+            fcl.distance(humanObject, robotObject, request, self.info)
 
     def getInfo(self):
         return self.info
