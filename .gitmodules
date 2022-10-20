@@ -13,3 +13,6 @@
 [submodule "kinematics_poe"]
 	path = kinematics_poe
 	url = git@github.com:KeV1NBR/kinematics_poe.git
+[submodule "src/amr"]
+	path = src/amr
+	url = git@github.com:KeV1NBR/amr.git

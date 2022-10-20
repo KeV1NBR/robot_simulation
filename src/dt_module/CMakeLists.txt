@@ -167,6 +167,16 @@ target_link_libraries(sync moveit_lib tm_lib ${catkin_LIBRARIES} ${Boost_LIBRARI
 add_dependencies(sync ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 
+include_directories(src/agv_sync/)
+
+add_executable(agv_sync src/agv_sync/agv_sync.cpp src/agv_sync/main.cpp)
+
+target_link_libraries(agv_sync ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_dependencies(agv_sync ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+
+
 include_directories(src/tf_publisher/)
 
 add_executable(tf_publisher src/tf_publisher/tf_publisher.cpp src/tf_publisher/main.cpp)
