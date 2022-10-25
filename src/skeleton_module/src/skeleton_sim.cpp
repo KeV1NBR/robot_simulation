@@ -8,18 +8,31 @@
 
 #include "gazebo_msgs/LinkState.h"
 #include "gazebo_msgs/SpawnModel.h"
+#include "kinect.h"
 #include "opencv2/opencv.hpp"
+#include "tf/LinearMath/Quaternion.h"
+#include "tf/LinearMath/Transform.h"
+#include "tf/transform_datatypes.h"
 
 using namespace cv;
 using namespace std;
+vector<double> quat2Euler(double rx, double ry, double rz, double rw) {
+    tf::Quaternion quaternion(rx, ry, rz, rw);
+    tf::Matrix3x3 rpy(quaternion);
+    vector<double> result(3, .0);
+    rpy.getRPY(result[0], result[1], result[2]);
 
+    return result;
+}
+vector<double> euler2Quat(double rx, double ry, double rz) {
+    tf2::Quaternion quaternion;
+    quaternion.setRPY(rx, ry, rz);
+    quaternion = quaternion.normalize();
+
+    return {quaternion.getX(), quaternion.getY(), quaternion.getZ(),
+            quaternion.getW()};
+}
 SkeletonSimNode::SkeletonSimNode() {
-    std::ifstream humanModelFile(
-        "/home/kevin/project/robot_simulation/src/skeleton_module/resource/"
-        "human/model.sdf");
-    humanModel.assign((std::istreambuf_iterator<char>(humanModelFile)),
-                      (std::istreambuf_iterator<char>()));
-
     spawnClient =
         nh.serviceClient<gazebo_msgs::SpawnModel>("/gazebo/spawn_sdf");
 
@@ -33,184 +46,218 @@ SkeletonSimNode::~SkeletonSimNode() {}
 
 void SkeletonSimNode::run() {
     ros::Rate loop_rate(10);
-    int key = 0;
 
-    while (ros::ok() && key != 27) {
-        cv::Mat color(1920, 1080, CV_8UC3);
-        cv::Mat depth(1920, 1080, CV_8UC1);
-
-        kinect.update();
-        color = kinect.getRgbImage();
-        depth = kinect.getDepthImage();
-        spawnHuman();
-
-        imshow("color", color);
-        imshow("depth", depth);
-        key = waitKey(1);
-
+    spawnHuman();
+    while (ros::ok()) {
+        moveSkeleton();
         ros::spinOnce();
         loop_rate.sleep();
     }
 }
 void SkeletonSimNode::spawnHuman() {
-    std::vector<k4abt_body_t> bodies = kinect.getBodies();
-    if (bodies.size() != 0) {
-        if (bodyNum < bodies.size()) {
-            for (int i = 0; i < bodies.size() - bodyNum; i++) {
-                std::vector<Point3f> skeleton =
-                    kinect.getConcernPart(bodies[i]);
-
-                if (!isBody) {
-                    std::vector<float> posKinectFrame = {
-                        (skeleton[0].x + skeleton[1].x) / 2000,
-                        (skeleton[0].y + skeleton[1].y) / 2000,
-                        (skeleton[0].z + skeleton[1].z) / 2000};
-                    setTF(posKinectFrame,
-                          "/human" + to_string(bodyNum + 1) + "_body");
-
-                    std::this_thread::sleep_for(chrono::milliseconds(100));
-                    tf::StampedTransform transform;
-
-                    listener.lookupTransform(
-                        "/world", "/human" + to_string(bodyNum + 1) + "_body",
-                        ros::Time(0), transform);
-
-                    system(("rosrun gazebo_ros spawn_model -sdf -file "
-                            "/home/kevin/project/robot_simulation/src/"
-                            "skeleton_module/resource/"
-                            "human/model.sdf "
-                            "-model "
-                            "human1 -x " +
-                            to_string(transform.getOrigin().x()) + " -y " +
-                            to_string(transform.getOrigin().y()))
-                               .c_str());
-                    isBody = true;
-                }
-                moveSkeleton(skeleton);
-            }
-        }
-    }
+    system(("rosrun gazebo_ros spawn_model -sdf -file "
+            "/home/kevin/project/robot_simulation/src/"
+            "skeleton_module/resource/"
+            "human/model.sdf "
+            "-model "
+            "human1 -x " +
+            to_string(0) + " -y " + to_string(0))
+               .c_str());
 }
 double rad2Degree(double rad) { return rad * 180 / M_PI; };
 
-void SkeletonSimNode::moveSkeleton(std::vector<Point3f> body) {
-    std::vector<float> headPos(6, .0);
-    std::vector<float> bodyPos(6, .0);
+void SkeletonSimNode::moveSkeleton() {
+    if (listener.canTransform("world", "/Spine_Naval0", ros::Time(0))) {
+        vector<tf::StampedTransform> transforms(12);
+        vector<float> positionTmp(7);
+        tf::Quaternion q;
+        tf::Quaternion deg90;
+        deg90.setRPY(0, M_PI_2, 0);
 
-    std::vector<float> shoulderLeftPos(6, .0);
-    std::vector<float> armLeftPos(6, .0);
-    std::vector<float> handLeftPos(6, .0);
+        listener.lookupTransform("/world", "/Spine_Naval0", ros::Time(0),
+                                 transforms[SPINE_NAVEL]);
+        listener.lookupTransform("/world", "/Spine_Chest0", ros::Time(0),
+                                 transforms[NECK]);
+        listener.lookupTransform("/world", "/Ear_Right0", ros::Time(0),
+                                 transforms[EYE_RIGHT]);
+        listener.lookupTransform("/world", "/Ear_Left0", ros::Time(0),
+                                 transforms[EYE_LEFT]);
+        listener.lookupTransform("/world", "/Shoulder_right0", ros::Time(0),
+                                 transforms[SHOULDER_RIGHT]);
+        listener.lookupTransform("/world", "/Elbow_right0", ros::Time(0),
+                                 transforms[ELBOW_RIGHT]);
+        listener.lookupTransform("/world", "/Wrist_right0", ros::Time(0),
+                                 transforms[WRIST_RIGHT]);
+        listener.lookupTransform("/world", "/Handtip_right0", ros::Time(0),
+                                 transforms[HANDTIP_RIGHT]);
+        listener.lookupTransform("/world", "Shoulder_left0", ros::Time(0),
+                                 transforms[SHOULDER_LEFT]);
+        listener.lookupTransform("/world", "Elbow_left0", ros::Time(0),
+                                 transforms[ELBOW_LEFT]);
+        listener.lookupTransform("/world", "Wrist_left0", ros::Time(0),
+                                 transforms[WRIST_LEFT]);
+        listener.lookupTransform("/world", "Handtip_left0", ros::Time(0),
+                                 transforms[HANDTIP_LEFT]);
 
-    std::vector<float> shoulderRightPos(6, .0);
-    std::vector<float> armRightPos(6, .0);
-    std::vector<float> handRightPos(6, .0);
+        // head
+        positionTmp[0] = (transforms[EYE_LEFT].getOrigin().x() +
+                          transforms[EYE_RIGHT].getOrigin().x()) /
+                         2;
+        positionTmp[1] = (transforms[EYE_LEFT].getOrigin().y() +
+                          transforms[EYE_RIGHT].getOrigin().y()) /
+                         2;
+        positionTmp[2] = (transforms[EYE_LEFT].getOrigin().z() +
+                          transforms[EYE_RIGHT].getOrigin().z()) /
+                         2;
 
-    headPos[0] = (body[EYE_LEFT].x + body[EYE_RIGHT].x) / 2000;
-    headPos[1] = (body[EYE_LEFT].y + body[EYE_RIGHT].y) / 2000 + .1;
-    headPos[2] = (body[EYE_LEFT].z + body[EYE_RIGHT].z) / 2000 + 0.15;
+        positionTmp[3] = 1;
+        positionTmp[4] = 0;
+        positionTmp[5] = 0;
+        positionTmp[6] = 0;
+        moveGazebo(positionTmp, "human1::head");
 
-    bodyPos[0] = (body[NECK].x + body[SPINE_NAVEL].x) / 2000;
-    bodyPos[1] = (body[NECK].y + body[SPINE_NAVEL].y) / 2000 + .2;
-    bodyPos[2] = (body[NECK].z + body[SPINE_NAVEL].z) / 2000;
-    // bodyPos[3] = atan2((body[NECK].z - body[SPINE_NAVEL].z),
-    //                   (body[NECK].y + body[SPINE_NAVEL].y)) +
-    //             M_PI_2;
-    // bodyPos[4] = atan2((body[NECK].x - body[SPINE_NAVEL].x),
-    //                   (body[NECK].z + body[SPINE_NAVEL].z));
-    // bodyPos[5] = atan2((body[NECK].y - body[SPINE_NAVEL].y),
-    //                   (body[NECK].x + body[SPINE_NAVEL].x));
+        // body
+        positionTmp[0] = (transforms[NECK].getOrigin().x() +
+                          transforms[SPINE_NAVEL].getOrigin().x()) /
+                         2;
+        positionTmp[1] = (transforms[NECK].getOrigin().y() +
+                          transforms[SPINE_NAVEL].getOrigin().y()) /
+                         2;
+        positionTmp[2] = (transforms[NECK].getOrigin().z() +
+                          transforms[SPINE_NAVEL].getOrigin().z()) /
+                         2;
 
-    shoulderLeftPos[0] = (body[SHOULDER_LEFT].x + body[ELBOW_LEFT].x) / 2000;
-    shoulderLeftPos[1] = (body[SHOULDER_LEFT].y + body[ELBOW_LEFT].y) / 2000;
-    shoulderLeftPos[2] = (body[SHOULDER_LEFT].z + body[ELBOW_LEFT].z) / 2000;
+        q = transforms[SPINE_NAVEL].getRotation();
+        q *= deg90;
+        positionTmp[3] = q.getW();
+        positionTmp[4] = q.getX();
+        positionTmp[5] = q.getY();
+        positionTmp[6] = q.getZ();
+        moveGazebo(positionTmp, "human1::body");
 
-    shoulderRightPos[0] = (body[SHOULDER_RIGHT].x + body[ELBOW_RIGHT].x) / 2000;
-    shoulderRightPos[1] = (body[SHOULDER_RIGHT].y + body[ELBOW_RIGHT].y) / 2000;
-    shoulderRightPos[2] = (body[SHOULDER_RIGHT].z + body[ELBOW_RIGHT].z) / 2000;
+        // shoulder_left
+        positionTmp[0] = (transforms[SHOULDER_LEFT].getOrigin().x() +
+                          transforms[ELBOW_LEFT].getOrigin().x()) /
+                         2;
+        positionTmp[1] = (transforms[SHOULDER_LEFT].getOrigin().y() +
+                          transforms[ELBOW_LEFT].getOrigin().y()) /
+                         2;
+        positionTmp[2] = (transforms[SHOULDER_LEFT].getOrigin().z() +
+                          transforms[ELBOW_LEFT].getOrigin().z()) /
+                         2;
 
-    armLeftPos[0] = (body[ELBOW_LEFT].x + body[WRIST_LEFT].x) / 2000;
-    armLeftPos[1] = (body[ELBOW_LEFT].y + body[WRIST_LEFT].y) / 2000;
-    armLeftPos[2] = (body[ELBOW_LEFT].z + body[WRIST_LEFT].z) / 2000;
+        q = transforms[SHOULDER_LEFT].getRotation();
+        q *= deg90;
+        positionTmp[3] = q.getW();
+        positionTmp[4] = q.getX();
+        positionTmp[5] = q.getY();
+        positionTmp[6] = q.getZ();
+        moveGazebo(positionTmp, "human1::shoulder_left");
 
-    armRightPos[0] = (body[ELBOW_RIGHT].x + body[WRIST_RIGHT].x) / 2000;
-    armRightPos[1] = (body[ELBOW_RIGHT].y + body[WRIST_RIGHT].y) / 2000;
-    armRightPos[2] = (body[ELBOW_RIGHT].z + body[WRIST_RIGHT].z) / 2000;
+        // arm_left
+        positionTmp[0] = (transforms[ELBOW_LEFT].getOrigin().x() +
+                          transforms[WRIST_LEFT].getOrigin().x()) /
+                         2;
+        positionTmp[1] = (transforms[ELBOW_LEFT].getOrigin().y() +
+                          transforms[WRIST_LEFT].getOrigin().y()) /
+                         2;
+        positionTmp[2] = (transforms[ELBOW_LEFT].getOrigin().z() +
+                          transforms[WRIST_LEFT].getOrigin().z()) /
+                         2;
 
-    handLeftPos[0] = (body[WRIST_LEFT].x + body[HANDTIP_LEFT].x) / 2000;
-    handLeftPos[1] = (body[WRIST_LEFT].y + body[HANDTIP_LEFT].y) / 2000;
-    handLeftPos[2] = (body[WRIST_LEFT].z + body[HANDTIP_LEFT].z) / 2000;
+        q = transforms[ELBOW_LEFT].getRotation();
+        q *= deg90;
+        positionTmp[3] = q.getW();
+        positionTmp[4] = q.getX();
+        positionTmp[5] = q.getY();
+        positionTmp[6] = q.getZ();
+        moveGazebo(positionTmp, "human1::arm_left");
 
-    handRightPos[0] = (body[WRIST_RIGHT].x + body[HANDTIP_RIGHT].x) / 2000;
-    handRightPos[1] = (body[WRIST_RIGHT].y + body[HANDTIP_RIGHT].y) / 2000;
-    handRightPos[2] = (body[WRIST_RIGHT].z + body[HANDTIP_RIGHT].z) / 2000;
+        // hand_left
+        positionTmp[0] = (transforms[WRIST_LEFT].getOrigin().x() +
+                          transforms[HANDTIP_LEFT].getOrigin().x()) /
+                         2;
+        positionTmp[1] = (transforms[WRIST_LEFT].getOrigin().y() +
+                          transforms[HANDTIP_LEFT].getOrigin().y()) /
+                         2;
+        positionTmp[2] = (transforms[WRIST_LEFT].getOrigin().z() +
+                          transforms[HANDTIP_LEFT].getOrigin().z()) /
+                         2;
 
-    bodyPos[3] = M_PI_2;
-    shoulderLeftPos[4] = M_PI_2;
-    shoulderRightPos[4] = M_PI_2;
-    armLeftPos[4] = M_PI_2;
-    armRightPos[4] = M_PI_2;
+        positionTmp[3] = 1;
+        positionTmp[4] = 0;
+        positionTmp[5] = 0;
+        positionTmp[6] = 0;
+        moveGazebo(positionTmp, "human1::hand_left");
 
-    setTF(headPos, "/human1_head");
-    setTF(bodyPos, "/human1_body");
-    setTF(shoulderLeftPos, "/human1_shoulder_left");
-    setTF(shoulderRightPos, "/human1_shoulder_right");
-    setTF(armLeftPos, "/human1_arm_left");
-    setTF(armRightPos, "/human1_arm_right");
-    setTF(handLeftPos, "/human1_hand_left");
-    setTF(handRightPos, "/human1_hand_right");
+        // shoulder_right
+        positionTmp[0] = (transforms[SHOULDER_RIGHT].getOrigin().x() +
+                          transforms[ELBOW_RIGHT].getOrigin().x()) /
+                         2;
+        positionTmp[1] = (transforms[SHOULDER_RIGHT].getOrigin().y() +
+                          transforms[ELBOW_RIGHT].getOrigin().y()) /
+                         2;
+        positionTmp[2] = (transforms[SHOULDER_RIGHT].getOrigin().z() +
+                          transforms[ELBOW_RIGHT].getOrigin().z()) /
+                         2;
 
-    std::this_thread::sleep_for(chrono::milliseconds(100));
+        q = transforms[SHOULDER_RIGHT].getRotation();
+        q *= deg90;
+        positionTmp[3] = q.getW();
+        positionTmp[4] = q.getX();
+        positionTmp[5] = q.getY();
+        positionTmp[6] = q.getZ();
+        moveGazebo(positionTmp, "human1::shoulder_right");
 
-    moveGazebo("/human1_head", "human1::head");
-    moveGazebo("/human1_body", "human1::body");
-    moveGazebo("/human1_shoulder_left", "human1::shoulder_left");
-    moveGazebo("/human1_arm_left", "human1::arm_left");
-    moveGazebo("/human1_hand_left", "human1::hand_left");
-    moveGazebo("/human1_shoulder_right", "human1::shoulder_right");
-    moveGazebo("/human1_arm_right", "human1::arm_right");
-    moveGazebo("/human1_hand_right", "human1::hand_right");
+        // arm_right
+        positionTmp[0] = (transforms[ELBOW_RIGHT].getOrigin().x() +
+                          transforms[WRIST_RIGHT].getOrigin().x()) /
+                         2;
+        positionTmp[1] = (transforms[ELBOW_RIGHT].getOrigin().y() +
+                          transforms[WRIST_RIGHT].getOrigin().y()) /
+                         2;
+        positionTmp[2] = (transforms[ELBOW_RIGHT].getOrigin().z() +
+                          transforms[WRIST_RIGHT].getOrigin().z()) /
+                         2;
+
+        q = transforms[ELBOW_RIGHT].getRotation();
+        q *= deg90;
+        positionTmp[3] = q.getW();
+        positionTmp[4] = q.getX();
+        positionTmp[5] = q.getY();
+        positionTmp[6] = q.getZ();
+        moveGazebo(positionTmp, "human1::arm_right");
+
+        // hand_right
+        positionTmp[0] = (transforms[WRIST_RIGHT].getOrigin().x() +
+                          transforms[HANDTIP_RIGHT].getOrigin().x()) /
+                         2;
+        positionTmp[1] = (transforms[WRIST_RIGHT].getOrigin().y() +
+                          transforms[HANDTIP_RIGHT].getOrigin().y()) /
+                         2;
+        positionTmp[2] = (transforms[WRIST_RIGHT].getOrigin().z() +
+                          transforms[HANDTIP_RIGHT].getOrigin().z()) /
+                         2;
+
+        positionTmp[3] = 1;
+        positionTmp[4] = 0;
+        positionTmp[5] = 0;
+        positionTmp[6] = 0;
+        moveGazebo(positionTmp, "human1::hand_right");
+    }
 }
-
-void SkeletonSimNode::setTF(std::vector<float> pos, std::string name) {
-    tf::Transform transform;
-    tf::Quaternion q;
-
-    transform.setOrigin(tf::Vector3(pos[0], pos[1], pos[2]));
-    q.setRPY(pos[3], pos[4], pos[5]);
-    transform.setRotation(q);
-    broadcaster.sendTransform(
-        tf::StampedTransform(transform, ros::Time::now(), "/kinect", name));
-}
-vector<double> quat2Euler(double rx, double ry, double rz, double rw) {
-    tf::Quaternion quaternion(rx, ry, rz, rw);
-    tf::Matrix3x3 rpy(quaternion);
-    vector<double> result(3, .0);
-    rpy.getRPY(result[0], result[1], result[2]);
-
-    return result;
-}
-void SkeletonSimNode::moveGazebo(std::string tfName, std::string linkName) {
-    tf::StampedTransform transform;
+void SkeletonSimNode::moveGazebo(vector<float> position, std::string linkName) {
     gazebo_msgs::LinkState msg;
     tf::Quaternion q;
 
-    listener.lookupTransform("/world", tfName, ros::Time(0), transform);
     msg.link_name = linkName;
-    msg.pose.position.x = transform.getOrigin().x();
-    msg.pose.position.y = transform.getOrigin().y();
-    msg.pose.position.z = transform.getOrigin().z();
-    q = transform.getRotation();
-    msg.pose.orientation.w = q.w();
-    msg.pose.orientation.x = q.x();
-    msg.pose.orientation.y = q.y();
-    msg.pose.orientation.z = q.z();
-    skeletonPublisher.publish(msg);
+    msg.pose.position.x = position[0];
+    msg.pose.position.y = position[1];
+    msg.pose.position.z = position[2];
+    msg.pose.orientation.w = position[3];
+    msg.pose.orientation.x = position[4];
+    msg.pose.orientation.y = position[5];
+    msg.pose.orientation.z = position[6];
 
-    if (linkName == "human1::body") {
-        vector<double> tmp = quat2Euler(q.x(), q.y(), q.z(), q.w());
-        for (int i = 0; i < tmp.size(); i++) {
-            // cout << tmp[i] << ", ";
-        }
-        //      cout << endl;
-    }
+    skeletonPublisher.publish(msg);
 }

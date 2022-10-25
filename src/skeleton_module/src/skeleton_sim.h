@@ -5,8 +5,6 @@
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
 
-#include "kinect.h"
-
 class SkeletonSimNode {
    public:
     SkeletonSimNode();
@@ -15,7 +13,6 @@ class SkeletonSimNode {
 
    private:
     ros::NodeHandle nh;
-    Kinect kinect;
 
     ros::ServiceClient spawnClient;
     ros::Publisher skeletonPublisher;
@@ -23,9 +20,8 @@ class SkeletonSimNode {
     std::string humanModel;
 
     void spawnHuman();
-    void moveSkeleton(std::vector<cv::Point3f> body);
-    void setTF(std::vector<float> pos, std::string name);
-    void moveGazebo(std::string tfName, std::string linkName);
+    void moveSkeleton();
+    void moveGazebo(std::vector<float> position, std::string linkName);
     int bodyNum;
     bool isBody;
 
