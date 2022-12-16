@@ -21,7 +21,6 @@ vector<double> quat2Euler(double rx, double ry, double rz, double rw) {
     tf::Matrix3x3 rpy(quaternion);
     vector<double> result(3, .0);
     rpy.getRPY(result[0], result[1], result[2]);
-
     return result;
 }
 vector<double> euler2Quat(double rx, double ry, double rz) {
