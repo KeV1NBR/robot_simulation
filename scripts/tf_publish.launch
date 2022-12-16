@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="tf" type="static_transform_publisher" name="origin_tf" args="0.042  -0.326 0.423 0 1.65806282 -1.57079632  origin/camera /origin/amr 10" />
+
+    <node pkg="tf" type="static_transform_publisher" name="orb_tf" args="0.042  -0.326 0.423 0 1.65806282 -1.57079632  orb/camera /orb/robot 10" />
+    <node pkg="tf" type="static_transform_publisher" name="amr_move" args="0 0 0 0 0 0 orb/robot /amr 10" />
+
+
+   </launch>
