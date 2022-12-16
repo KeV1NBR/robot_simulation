@@ -2,6 +2,7 @@ import rospy
 import fcl
 import tf
 import numpy as np
+import time
 
 # human setting
 body = fcl.Cylinder(0.2, 0.6) #0
@@ -129,6 +130,7 @@ if __name__ == '__main__':
 
     #rate = rospy.Rate(10.0)
     while not rospy.is_shutdown():
+        start = time.time()
         if updateTransforms():
 
             rospy.loginfo('it')
@@ -136,6 +138,9 @@ if __name__ == '__main__':
                 info = it.update()
                 print((humanPartIndex[it.humanPartNum].partName) + ' ' + (robotPartIndex[it.robotPartNum].partName) + ' : ' ,info.min_distance)
             print('\n\n')
+            end = time.time()
+            print(start-end, 's')
         else:
             print('cant get tf')
-    #    rate.sleep()
+
+     #   rate.sleep()

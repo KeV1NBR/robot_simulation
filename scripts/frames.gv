@@ -1,0 +1,7 @@
+digraph G {
+"camera_base" -> "camera_body"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 \nBuffer length: 0.000 sec\n"];
+"camera_base" -> "camera_visor"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 \nBuffer length: 0.000 sec\n"];
+"camera_base" -> "depth_camera_link"[label="Broadcaster: /azure_kinect_ros_driver\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 \nBuffer length: 0.000 sec\n"];
+"depth_camera_link" -> "imu_link"[label="Broadcaster: /azure_kinect_ros_driver\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 \nBuffer length: 0.000 sec\n"];
+"depth_camera_link" -> "rgb_camera_link"[label="Broadcaster: /azure_kinect_ros_driver\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 \nBuffer length: 0.000 sec\n"];
+}
