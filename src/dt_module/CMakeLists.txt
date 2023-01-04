@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  message_generation
 
   genmsg
   actionlib_msgs
@@ -21,13 +22,35 @@ find_package(catkin REQUIRED COMPONENTS
   moveit_ros_perception
   moveit_ros_planning_interface
 
+  pcl_conversions
+  pcl_msgs
+  pcl_ros
+
   tm_msgs
+
+  cv_bridge
 )
 
 include_directories(${catkin_INCLUDE_DIRS})
 
 
 find_package(Poco COMPONENTS Net)
+
+find_package(OpenCV)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+find_path(DARKNET_INCLUDE_DIRS yolo_v2_class.hpp
+    "/usr/include"
+    "/usr/local/include"
+    "/home/kevin/api/darknet/include"
+    )
+find_library(DARKNET_LIBRARIES libdarknet.so
+    "/usr/lib"
+    "/usr/local/lib"
+    "/home/kevin/api/darknet"
+    )
+include_directories(${DARKNET_INCLUDE_DIRS})
+
 
 set(DEPS_PATH
     ${CMAKE_CURRENT_SOURCE_DIR}/library/moveit_lib
@@ -73,11 +96,11 @@ endforeach()
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+ add_message_files(
+   FILES
+   bbox.msg
+   bboxes.msg
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -194,6 +217,22 @@ target_link_libraries(robot_collid ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
 add_dependencies(robot_collid ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
+
+include_directories(src/yolo/)
+
+add_executable(yolo src/yolo/yolo.cpp src/yolo/main.cpp)
+
+target_link_libraries(yolo ${DARKNET_LIBRARIES} ${OpenCV_LIBS} ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_dependencies(yolo ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
+include_directories(src/obj_generate/)
+
+add_executable(obj_generate src/obj_generate/obj_generate.cpp src/obj_generate/main.cpp)
+
+target_link_libraries(obj_generate ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+
+add_dependencies(obj_generate ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 
 ## Rename C++ executable without prefix
