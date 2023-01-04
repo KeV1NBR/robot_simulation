@@ -17,12 +17,12 @@
       <self_collide>0</self_collide>
       <enable_wind>0</enable_wind>
       <kinematic>0</kinematic>
-      <pose>-1.7 0.475 1.5 0 -0 0</pose>
+      <pose>-1.7 0.475 0.15 0 -0 0</pose>
       <gravity>0</gravity>
       <visual name='visual'>
         <geometry>
           <box>
-            <size>0.05 7.01 3</size>
+            <size>0.05 7.01 0.3</size>
           </box>
         </geometry>
         <material>
@@ -59,12 +59,12 @@
       <self_collide>0</self_collide>
       <enable_wind>0</enable_wind>
       <kinematic>0</kinematic>
-      <pose>-0.475 4.005 1.5 -1e-05 -0 0</pose>
+      <pose>-0.475 4.005 0.15 -1e-05 -0 0</pose>
       <gravity>0</gravity>
       <visual name='visual'>
         <geometry>
           <box>
-            <size>2.5 0.05 3</size>
+            <size>2.5 0.05 0.3</size>
           </box>
         </geometry>
         <material>
@@ -101,12 +101,12 @@
       <self_collide>0</self_collide>
       <enable_wind>0</enable_wind>
       <kinematic>0</kinematic>
-      <pose>1.7 0.025 1.5 -1e-05 -0 0</pose>
+      <pose>1.7 0.025 0.15 -1e-05 -0 0</pose>
       <gravity>0</gravity>
       <visual name='visual'>
         <geometry>
           <box>
-            <size>0.05 8.01 3</size>
+            <size>0.05 8.01 0.3</size>
           </box>
         </geometry>
         <material>
@@ -143,12 +143,12 @@
       <self_collide>0</self_collide>
       <enable_wind>0</enable_wind>
       <kinematic>0</kinematic>
-      <pose>-0 -4.005 1.5 -2e-05 0 0</pose>
+      <pose>-0 -4.005 0.15 -2e-05 0 0</pose>
       <gravity>0</gravity>
       <visual name='visual'>
         <geometry>
           <box>
-            <size>3.45 0.05 3</size>
+            <size>3.45 0.05 0.3</size>
           </box>
         </geometry>
         <material>
