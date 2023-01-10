@@ -16,7 +16,7 @@ using namespace std;
 YoloNode::YoloNode() {
     string cfg = "/home/kevin/api/darknet/cfg/yolov4.cfg";
     string weights = "/home/kevin/api/darknet/yolov4.weights";
-    detector = new Detector(cfg, weights, 1);
+    detector = new Detector(cfg, weights, 0);
     yoloPublisher =
         nh.advertise<dt_module::bboxes>("/dt_module/yolo_result", 10);
 
