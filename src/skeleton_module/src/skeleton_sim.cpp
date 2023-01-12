@@ -47,7 +47,7 @@ SkeletonSimNode::SkeletonSimNode() {
 SkeletonSimNode::~SkeletonSimNode() {}
 
 void SkeletonSimNode::run() {
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(100);
 
     spawnHuman();
     while (ros::ok()) {
@@ -69,7 +69,7 @@ void SkeletonSimNode::spawnHuman() {
 double rad2Degree(double rad) { return rad * 180 / M_PI; };
 
 void SkeletonSimNode::moveSkeleton() {
-    if (tfBuffer.canTransform("world", "/Spine_Naval0", ros::Time(0))) {
+    if (tfBuffer.canTransform("world", "Spine_Naval0", ros::Time(0))) {
         vector<geometry_msgs::TransformStamped> transforms(12);
         vector<float> positionTmp(7);
         tf::Quaternion q;
