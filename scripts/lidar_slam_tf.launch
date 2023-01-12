@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="tf" type="static_transform_publisher" name="scan2amr" args="0., 0., 0., 0., 0., 0.  /amr /scan 10" />
+   </launch>

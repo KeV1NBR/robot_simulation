@@ -1,0 +1,13 @@
+<!-- Merge LiDAR setup -->
+	<node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+        <param name="destination_frame"          value="$(arg merge_laser_frame)"/>
+        <param name="cloud_destination_topic"    value="$(arg merge_cloud_topic)"/>
+        <param name="scan_destination_topic"     value="$(arg merge_scan_topic)"/>
+        <param name="laserscan_topics"           value ="$(arg front_scan_topic) $(arg rear_scan_topic)" />
+        <param name="angle_min"                  value="-3.1416"/>
+        <param name="angle_max"                  value="3.1416"/>
+        <param name="angle_increment"            value="0.0080"/>
+        <param name="scan_time"                  value="0.0333333"/>
+        <param name="range_min"                  value="0.15"/>
+        <param name="range_max"                  value="18.0"/>
+	</node>
