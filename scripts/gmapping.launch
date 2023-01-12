@@ -5,7 +5,6 @@
     <arg name="base_frame" default="/scan"/>
     <arg name="odom_frame" default="/odom"/>
     <arg name="map_frame" default="/map"/>
-
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen" clear_params="true">
         <param name="base_frame" value="$(arg base_frame)"/>     <!-- 根据自己的基座标系名称进行修改 -->
         <param name="odom_frame" value="$(arg odom_frame)"/>               <!-- 根据自己的里程计坐标系名称进行修改 -->
