@@ -2,7 +2,7 @@
 
 <launch>
     <arg name="scan_topic" default="scan" />                  <!-- 根据自己发布scan名称进行修改 -->
-    <arg name="base_frame" default="/scan"/>
+    <arg name="base_frame" default="/amr"/>
     <arg name="odom_frame" default="/odom"/>
     <arg name="map_frame" default="/map"/>
     <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen" clear_params="true">
