@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<launch>
+  <param name="2F_cabinet3" textfile="$(find dt_module)/resource/2F_cabinet3/model.sdf" />
+  <param name="2F_cabinet1" textfile="$(find dt_module)/resource/2F_cabinet1/model.sdf" />
+  <param name="2F_cabinet2" textfile="$(find dt_module)/resource/2F_cabinet2/model.sdf" />
+  <param name="2F_table" textfile="$(find dt_module)/resource/2F_table/model.sdf" />
+  <param name="2F_bed" textfile="$(find dt_module)/resource/2F_bed/model.sdf" />
+  <param name="hex" textfile="$(find dt_module)/resource/hex/model.sdf" />
+
+  <node name="spawn_cabinet3_0" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_0 -x 0 -y 0" />
+  <node name="spawn_cabinet3_1" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_1 -x 0.452 -y 0" />
+  <node name="spawn_cabinet3_2" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_2 -x 0.904 -y 0" />
+  <node name="spawn_cabinet3_3" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_3 -x 1.356 -y 0" />
+  <node name="spawn_cabinet3_4" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_4 -x 1.808 -y 0" />
+  <node name="spawn_cabinet3_5" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_5 -x 2.258 -y 0" />
+  <node name="spawn_cabinet3_6" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_6 -x 2.710 -y 0" />
+  <node name="spawn_cabinet3_7" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_7 -x 3.162 -y 0" />
+  <node name="spawn_cabinet3_8" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_8 -x 3.614 -y 0" />
+  <node name="spawn_cabinet3_9" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_9 -x 4.066 -y 0" />
+  <node name="spawn_cabinet3_10" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_10 -x 4.518 -y 0" />
+  <node name="spawn_cabinet3_11" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_11 -x 4.970 -y 0" />
+  <node name="spawn_cabinet3_12" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_12 -x 5.422 -y 0" />
+  <node name="spawn_cabinet3_13" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_13 -x 5.874 -y 0" />
+
+  <node name="spawn_cabinet1" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet1 -sdf -model 2F_cabinet1 -x 2.5015 -y -0.5525" />
+  <node name="spawn_cabinet2" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet2 -sdf -model 2F_cabinet2 -x 2.5015 -y -5.5375" />
+
+  <node name="spawn_table" pkg="gazebo_ros" type="spawn_model" args="-param 2F_table -sdf -model 2F_table -x 4.2015 -y -3.045" />
+  <node name="spawn_bed" pkg="gazebo_ros" type="spawn_model" args="-param 2F_bed -sdf -model 2F_bed -x 0.8015 -y -3.045" />
+  <node name="spawn_hex0" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex0 -x 6.7991 -y -1.07 -Y 1.57079632679" />
+  <node name="spawn_hex1" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex1 -x 6.7991 -y -2.15 -Y 1.57079632679" />
+  <node name="spawn_hex2" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex2 -x 6.7991 -y -3.03 -Y 1.57079632679" />
+  <node name="spawn_hex3" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex3 -x 6.7991 -y -4.8 -Y 1.57079632679" />
+  <node name="spawn_hex4" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex4 -x 6.7991 -y -5.86 -Y 1.57079632679" />
+  <node name="spawn_hex5" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex5 -x 6.7991 -y -6.97 -Y 1.57079632679" />
+  <node name="spawn_hex6" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex6 -x -0.991 -y -1.86 " />
+  <node name="spawn_hex7" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex7 -x -0.991 -y -2.91 " />
+  <node name="spawn_hex8" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex8 -x -0.991 -y -4.44 " />
+  <node name="spawn_hex9" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex9 -x -0.991 -y -6.57 " />
+  <node name="spawn_hex10" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex10 -x -0.043 -y -6.57 -Y 1.57079632679" />
+  </launch>
