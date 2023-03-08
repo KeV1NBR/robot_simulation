@@ -6,6 +6,7 @@
   <param name="2F_table" textfile="$(find dt_module)/resource/2F_table/model.sdf" />
   <param name="2F_bed" textfile="$(find dt_module)/resource/2F_bed/model.sdf" />
   <param name="hex" textfile="$(find dt_module)/resource/hex/model.sdf" />
+  <param name="2F_wall" textfile="$(find dt_module)/resource/2F_wall/model.sdf" />
 
   <node name="spawn_cabinet3_0" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_0 -x 0 -y 0" />
   <node name="spawn_cabinet3_1" pkg="gazebo_ros" type="spawn_model" args="-param 2F_cabinet3 -sdf -model 2F_cabinet3_1 -x 0.452 -y 0" />
@@ -38,4 +39,6 @@
   <node name="spawn_hex8" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex8 -x -0.991 -y -4.44 " />
   <node name="spawn_hex9" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex9 -x -0.991 -y -6.57 " />
   <node name="spawn_hex10" pkg="gazebo_ros" type="spawn_model" args="-param hex -sdf -model hex10 -x -0.043 -y -6.57 -Y 1.57079632679" />
+
+  <node name="spawn_wall" pkg="gazebo_ros" type="spawn_model" args="-param 2F_wall -sdf -model wall -x 3.93  -y -3.78" />
   </launch>
